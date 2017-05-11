@@ -40,9 +40,64 @@ component{
 
 	// request start
 	public boolean function onRequestStart( string targetPage ){
-		// Process ColdBox Request
-		application.cbBootstrap.onRequestStart( arguments.targetPage );
+		
+		if( !structKeyExists( application, 'reiniting' ) ) {
+			application.reiniting = false;
+		}
+		
+		if( application.reiniting ) {
+			writeOutput( 'Under maintenance' );
+			cfHeader( statusCode="500", statustext="Under maintenance" );
+			systemOutput( 'Under maintenance', true );
+			return false;
+		}
+					
+		var appKey 			= 'cbController';
+		var cbController 	= "";
+		var needReinit 		= application.cbBootstrap.isfwReinit();
 
+		// Initialize the Controller If Needed, double locked
+		if( NOT structkeyExists( application, appkey ) OR NOT application[ appKey ].getColdboxInitiated() OR needReinit ){
+			lock type="exclusive" name="#application.cbBootstrap.getAppHash()#" timeout="30" throwontimeout="true"{
+				// double lock
+				if( NOT structkeyExists( application, appkey ) OR NOT application[ appKey ].getColdboxInitiated() OR needReinit ){						
+
+					try{
+						application.reiniting = true;
+						
+						// Simulate a bit slower reinit
+						sleep( 1000 );
+						
+						// Verify if we are Reiniting?
+						if( structkeyExists( application, appKey ) AND application[ appKey ].getColdboxInitiated() AND needReinit ){	
+							// process preReinit interceptors
+							application[ appKey ].getInterceptorService().processState( "preReinit" );
+							// Shutdown the application services
+							application[ appKey ].getLoaderService().processShutdown();
+						}
+	
+						// Reload ColdBox
+						application.cbBootstrap.loadColdBox();
+						// Remove any context stragglers
+						structDelete( request, "cb_requestContext" );
+					} catch( any e ) {
+						rethrow;
+					} finally{
+						application.reiniting = false;
+					}
+					
+				}
+			} // end lock
+		}
+
+
+		// Calling this again.  It won't trigger a reinit, but it does have additional logic for things like singleton reload.
+		
+		application.cbBootstrap.reloadChecks();
+		// Process A ColdBox Request Only
+		if( findNoCase( 'index.cfm', listLast( arguments.targetPage, '/' ) ) ){
+			application.cbBootstrap.processColdBoxRequest();
+		}
 		return true;
 	}
 
