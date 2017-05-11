@@ -40,22 +40,36 @@ component{
 
 	// request start
 	public boolean function onRequestStart( string targetPage ){
-		// Process ColdBox Request
-		application.cbBootstrap.onRequestStart( arguments.targetPage );
-
+				
+		// Verify Reloading
+		application.cbBootstrap.reloadChecks();
+		
+		// Process A ColdBox Request Only
+		if( findNoCase( 'index.cfm', listLast( arguments.targetPage, '/' ) ) ){
+			// Read only lock on all request processing
+			lock name="#application.cbBootstrap.getAppHash()#" timeout="60" type="readonly" {   
+				application.cbBootstrap.processColdBoxRequest();
+			}
+		}
 		return true;
 	}
 
 	public void function onSessionStart(){
-		application.cbBootStrap.onSessionStart();
+		lock name="#application.cbBootstrap.getAppHash()#" timeout="60" type="readonly" {
+			application.cbBootStrap.onSessionStart();
+		}
 	}
 
 	public void function onSessionEnd( struct sessionScope, struct appScope ){
-		arguments.appScope.cbBootStrap.onSessionEnd( argumentCollection=arguments );
+		lock name="#application.cbBootstrap.getAppHash()#" timeout="60" type="readonly" {
+			arguments.appScope.cbBootStrap.onSessionEnd( argumentCollection=arguments );
+		}
 	}
 
 	public boolean function onMissingTemplate( template ){
-		return application.cbBootstrap.onMissingTemplate( argumentCollection=arguments );
+		lock name="#application.cbBootstrap.getAppHash()#" timeout="60" type="readonly" {
+			return application.cbBootstrap.onMissingTemplate( argumentCollection=arguments );
+		}
 	}
 
 }

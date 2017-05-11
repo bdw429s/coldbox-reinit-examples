@@ -11,7 +11,7 @@
 
 			//Development Settings
 			reinitPassword			= "",
-			handlersIndexAutoReload = true,
+			handlersIndexAutoReload = false,
 
 			//Implicit Events
 			defaultEvent			= "",
@@ -40,7 +40,7 @@
 			customErrorTemplate		= "",
 
 			//Application Aspects
-			handlerCaching 			= false,
+			handlerCaching 			= true,
 			eventCaching			= false,
 			viewCaching				= false
 		};
