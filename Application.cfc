@@ -65,9 +65,6 @@ component{
 					try{
 						application.reiniting = true;
 						
-						// Simulate a bit slower reinit
-						sleep( 1000 );
-						
 						// Verify if we are Reiniting?
 						if( structkeyExists( application, appKey ) AND application[ appKey ].getColdboxInitiated() AND needReinit ){	
 							// process preReinit interceptors
