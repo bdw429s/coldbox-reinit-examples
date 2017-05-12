@@ -1,0 +1,25 @@
+{
+    "name":"AutoDeploy",
+    "author":"Ortus Solutions <info@ortussolutions.com>",
+    "location":"https://github.com/coldbox-modules/cbox-autodeploy/archive/v1.2.0.zip",
+    "version":"1.2.0",
+    "slug":"autodeploy",
+    "type":"modules",
+    "documentation":"https://github.com/coldbox-modules/cbox-autodeploy",
+    "bugs":"https://github.com/coldbox-modules/cbox-autodeploy/issues",
+    "repository":{
+        "type":"git",
+        "url":"https://github.com/coldbox-modules/cbox-autodeploy"
+    },
+    "description":"A module that detects new deploys and auto-restarts a ColdBox application with some added pizzazz",
+    "license":[
+        {
+            "type":"Apache2",
+            "url":"http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    ],
+    "ignore":[
+        "tests/*",
+        ".git*"
+    ]
+}

@@ -26,10 +26,12 @@
     },
     "installPaths":{
         "coldbox":"coldbox",
-        "testbox":"testbox"
+        "testbox":"testbox",
+        "autodeploy":"modules\\autodeploy"
     },
     "dependencies":{
-        "coldbox":"^4.3.0"
+        "coldbox":"^4.3.0",
+        "autodeploy":"^1.2.0"
     },
     "scripts":{
         "postVersion":"package set location='https://github.com/coldbox-templates/advanced-script/archive/v`package version`.zip'",
