@@ -41,14 +41,13 @@ component{
 	// request start
 	public boolean function onRequestStart( string targetPage ){
 		
-		if( !structKeyExists( application, 'reiniting' ) ) {
-			application.reiniting = false;
-		}
+		cfparam( name="application.reiniting", default=false );
 		
+		// Fail fast so users coming in during the reinit just get an instant maintenance page.
 		if( application.reiniting ) {
 			writeOutput( 'Under maintenance' );
+			// You don't have to return a 500, I just did this so JMeter would report it differently than a 200 
 			cfHeader( statusCode="500", statustext="Under maintenance" );
-			systemOutput( 'Under maintenance', true );
 			return false;
 		}
 					
@@ -63,6 +62,7 @@ component{
 				if( NOT structkeyExists( application, appkey ) OR NOT application[ appKey ].getColdboxInitiated() OR needReinit ){						
 
 					try{
+						// Let the world know we're reinitting.
 						application.reiniting = true;
 						
 						// Verify if we are Reiniting?
@@ -88,9 +88,9 @@ component{
 		}
 
 
-		// Calling this again.  It won't trigger a reinit, but it does have additional logic for things like singleton reload.
-		
+		// Calling this again.  It won't trigger a reinit, but it does have additional logic for things like singleton reload.		
 		application.cbBootstrap.reloadChecks();
+		
 		// Process A ColdBox Request Only
 		if( findNoCase( 'index.cfm', listLast( arguments.targetPage, '/' ) ) ){
 			application.cbBootstrap.processColdBoxRequest();
