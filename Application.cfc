@@ -47,7 +47,7 @@ component{
 		if( application.reiniting ) {
 			writeOutput( 'Under maintenance' );
 			// You don't have to return a 500, I just did this so JMeter would report it differently than a 200 
-			cfHeader( statusCode="500", statustext="Under maintenance" );
+			cfHeader( statusCode="501", statustext="Under maintenance" );
 			return false;
 		}
 					
