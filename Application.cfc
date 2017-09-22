@@ -61,7 +61,7 @@ component{
 	}
 
 	public void function onSessionEnd( struct sessionScope, struct appScope ){
-		lock name="#application.cbBootstrap.getAppHash()#" timeout="60" type="readonly" {
+		lock name="#arguments.appScope.cbBootstrap.getAppHash()#" timeout="60" type="readonly" {
 			arguments.appScope.cbBootStrap.onSessionEnd( argumentCollection=arguments );
 		}
 	}
